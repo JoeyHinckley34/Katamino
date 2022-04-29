@@ -148,7 +148,19 @@ def rotate (pentamino):
         for y in range(0,lengthy):
             newshape[x][y] = pentamino.shape[lengthy-y-1][x]     
     return Pentamino(newshape,pentamino.id)
-    
+
+def transpose (pentamino):
+    """determine transpose"""
+    leny = int(pentamino.wid)
+    len = int(pentamino.len)
+    news = [[0 for j in range(leny)]for i in range(lenx)]
+
+    for x in range(0, lenx):
+        for y in range(0, leny):
+            news[x][y] = pentamino.shape[y][x]
+    return Pentamino(news,pentamino.id)
+
+
 def main():
     #list of all pentaminoes
     #3d array
@@ -168,7 +180,7 @@ def main():
     for i in b.pentas:
         print(i)
 
-    rot4 = rotate(allPC[4])
+    rot4 = transpose(allPC[4])
     print(rot4)
    
 
