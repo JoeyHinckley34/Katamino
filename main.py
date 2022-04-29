@@ -152,7 +152,7 @@ def rotate (pentamino):
 def transpose (pentamino):
     """determine transpose"""
     leny = int(pentamino.wid)
-    len = int(pentamino.len)
+    lenx = int(pentamino.len)
     news = [[0 for j in range(leny)]for i in range(lenx)]
 
     for x in range(0, lenx):
@@ -172,16 +172,22 @@ def main():
         allPC.append(Pentamino(i,x))
         x += 1
     
-    for i in allPC:
-        print(i)
-    
-    b = board(4,[allPC[4],allPC[5],allPC[11]])
-    print(b)
-    for i in b.pentas:
-        print(i)
+#    for i in allPC:
+#        print(i)
+#    
+#    b = board(4,[allPC[4],allPC[5],allPC[11]])
+#    print(b)
+#    for i in b.pentas:
+#        print(i)
 
-    rot4 = transpose(allPC[4])
-    print(rot4)
+    for i in range(4):
+        allPC[4] = rotate(allPC[4])
+        print(allPC[4])
+
+    allPC[4] = transpose(allPC[4])
+    for i in range(4):
+        print(allPC[4])
+        allPC[4] = rotate(allPC[4])
    
 
 if __name__ == '__main__':
