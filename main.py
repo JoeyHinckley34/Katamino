@@ -73,6 +73,10 @@ class Pentamino:
     def __init__(self, _shape, _id):
         self.shape = _shape
         self.id = _id
+        self.len = len(self.shape[0])
+        self.wid = len(self.shape)
+
+
 
     def __str__(self):
         col = colorNums.colors[self.id]
@@ -87,7 +91,7 @@ class Pentamino:
                 else:
                     ret += col
                     ret += '*'
-                
+               # ret += i
             ret += "\n"
         ret += bcolors.ResetAll
         return ret
@@ -133,24 +137,43 @@ def getPentas(filename):
             penta.append([s for s in d])
     return allPentas
     
+def rotate (pentamino):
+    """function to rotate a shape 90 deg CW"""
+    lengthy = int(pentamino.wid) 
+    lengthx = int(pentamino.len)
+
+    print(type(lengthx),lengthy)
+
+    newshape = np.zeros((lengthx,lengthy))
+
+    print(type(newshape))
+
+    for x in range(0,lengthx):
+        for y in range(0,lengthy):
+            newshape[x][y] = pentamino.shape[lengthy-y-1][x]     
+    return newshape
     
 def main():
-
+    #list of all pentaminoes
+    #3d array
     allPentas = getPentas('Pentamino.txt')
-    
+    #list of all pentamino objects
     allPC = []
     x = 0
     for i in allPentas:
         allPC.append(Pentamino(i,x))
         x += 1
     
-#    for i in allPC:
-#        print(i)
+    for i in allPC:
+        print(i)
     
-    b = board(3,[allPC[4],allPC[5],allPC[11]])
+    b = board(4,[allPC[4],allPC[5],allPC[11]])
     print(b)
     for i in b.pentas:
         print(i)
+
+    rot4 = rotate(allPC[4])
+    print(rot4)
    
 
 if __name__ == '__main__':
