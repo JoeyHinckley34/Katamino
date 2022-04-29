@@ -91,7 +91,7 @@ class Pentamino:
                 else:
                     ret += col
                     ret += '*'
-               # ret += i
+#                ret += i
             ret += "\n"
         ret += bcolors.ResetAll
         return ret
@@ -142,16 +142,12 @@ def rotate (pentamino):
     lengthy = int(pentamino.wid) 
     lengthx = int(pentamino.len)
 
-    print(type(lengthx),lengthy)
-
-    newshape = np.zeros((lengthx,lengthy))
-
-    print(type(newshape))
-
+    newshape = [[ 0 for j in range(lengthy) ]for i in range(lengthx)]
+    
     for x in range(0,lengthx):
         for y in range(0,lengthy):
             newshape[x][y] = pentamino.shape[lengthy-y-1][x]     
-    return newshape
+    return Pentamino(newshape,pentamino.id)
     
 def main():
     #list of all pentaminoes
