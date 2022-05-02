@@ -75,7 +75,7 @@ class Pentamino:
         self.id = _id
         self.len = len(self.shape[0])
         self.wid = len(self.shape)
-
+#        self.shapes =
 
 
     def __str__(self):
@@ -101,20 +101,27 @@ class board:
     def __init__(self,_size,_pentas):
         self.size = _size
         self.pentas = _pentas
+        self.board = [[0 for j in range(_size)]for i in range(5)]
         
         
     def __str__(self):
         ret = "+"
         ret += "---+" * self.size
         ret += "\n"
-        for i in range(5):
+        for i in range(len(self.board)):
             ret +="|"
-            ret += " . |"*self.size
+            for j in range(len(self.board[i])):
+                ret += ' ' + str(self.board[i][j]) +' |'
             ret += "\n"
         ret += "+"
         ret += "---+" * self.size
         ret += "\n"
+        ret += str(self.board)
         return ret
+    
+    
+    
+    
 
 
 #@param filename : filename we are reading in 'Penatmino.txt'
@@ -158,7 +165,10 @@ def transpose (pentamino):
     for x in range(0, lenx):
         for y in range(0, leny):
             news[x][y] = pentamino.shape[y][x]
+            
     return Pentamino(news,pentamino.id)
+
+
 
 
 def main():
@@ -171,23 +181,25 @@ def main():
     for i in allPentas:
         allPC.append(Pentamino(i,x))
         x += 1
-    
+#
 #    for i in allPC:
 #        print(i)
-#    
-#    b = board(4,[allPC[4],allPC[5],allPC[11]])
-#    print(b)
+
+    b = board(4,[allPC[4],allPC[5],allPC[11]])
+    print(b)
+    
+    
 #    for i in b.pentas:
 #        print(i)
 
     for i in range(4):
-        allPC[4] = rotate(allPC[4])
-        print(allPC[4])
+        allPC[3] = rotate(allPC[3])
+        print(allPC[3])
 
-    allPC[4] = transpose(allPC[4])
+    allPC[5] = transpose(allPC[5])
     for i in range(4):
-        print(allPC[4])
-        allPC[4] = rotate(allPC[4])
+        print(allPC[5])
+        allPC[5] = rotate(allPC[5])
    
 
 if __name__ == '__main__':
