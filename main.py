@@ -1,4 +1,4 @@
-from turtle import xcor
+
 import numpy as np
 import time as t
 
@@ -124,10 +124,11 @@ class board:
     
     def solve(self):
 
+        x = 0
+        y = 0
         for i in range(len(self.pentas)):
             print("Now on shape: ", i, "\n", self.pentas[i])
-            x = 0
-            y = 0
+            
             found = False
             while (y < len(self.board)):
                 #print("top: ", i, x, y)
@@ -137,9 +138,12 @@ class board:
                     #valid place
                     #put into history
                     print(i)
-                    self.history.append(self.pentas[i])
+                    self.history.append((self.pentas[i], x, y))
                     found = True
                     print("PLACED: ", x, y)
+                    x = 0
+                    y = 0
+                    break
                 else:
                     if (x == len(self.board[0])): #might be board[0]
                         x = 0
@@ -151,6 +155,9 @@ class board:
             #no valid position, backtrack through history.
             if not found:
                 print("backtrack")
+                i -= 1
+                prev = self.history.pop(-1)
+                self.pentas[i] = transpose(prev[0])
 
         return False
 
