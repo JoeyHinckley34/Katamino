@@ -1,4 +1,6 @@
+from turtle import xcor
 import numpy as np
+import time as t
 
 class bcolors:
     ResetAll = "\033[0m"
@@ -101,6 +103,7 @@ class board:
     def __init__(self,_size,_pentas):
         self.size = _size
         self.pentas = _pentas
+        self.history = []
         self.board = [[0 for j in range(_size)]for i in range(5)]
         
         
@@ -116,10 +119,63 @@ class board:
         ret += "+"
         ret += "---+" * self.size
         ret += "\n"
-        ret += str(self.board)
+        #ret += str(self.board)
         return ret
     
-    
+    def solve(self):
+
+        for i in range(len(self.pentas)):
+            print("Now on shape: ", i, "\n", self.pentas[i])
+            x = 0
+            y = 0
+            found = False
+            while (y < len(self.board)):
+                #print("top: ", i, x, y)
+                #print(x, y)
+                ret = self.place(self.pentas[i], x, y)
+                if (ret):
+                    #valid place
+                    #put into history
+                    print(i)
+                    self.history.append(self.pentas[i])
+                    found = True
+                    print("PLACED: ", x, y)
+                else:
+                    if (x == len(self.board[0])): #might be board[0]
+                        x = 0
+                        y += 1
+                    else:
+                        x += 1
+                
+            #break
+            #no valid position, backtrack through history.
+            if not found:
+                print("backtrack")
+
+        return False
+
+    def place(self, piece, x, y):
+        #returns true on successfull place
+
+        #print(piece.shape)
+        for i in range(len(piece.shape)):
+            for j in range(len(piece.shape[i])):
+                #print(x + i, j + y, len(self.board))
+                if ((x + i < 0 or j + y < 0) or (x + i >= len(self.board) or j + y >= len(self.board[0]))):
+                    #print("OOB")
+                    return False
+                
+                elif (self.board[i + x][j + y] != 0):
+                    #print("Collision:")
+                    return False
+
+        for i in range(len(piece.shape)):
+            for j in range(len(piece.shape[i])):
+                if (piece.shape[i][j] == '1'):
+                    #print(i, j, x, y)
+                    self.board[i + x][j + y] = piece.id
+
+        return True
     
     
 
@@ -186,21 +242,10 @@ def main():
 #        print(i)
 
     b = board(4,[allPC[4],allPC[5],allPC[11]])
+    b.solve()
+    print("FINISHED BOARD:::")
     print(b)
-    
-    
-#    for i in b.pentas:
-#        print(i)
 
-    for i in range(4):
-        allPC[3] = rotate(allPC[3])
-        print(allPC[3])
-
-    allPC[5] = transpose(allPC[5])
-    for i in range(4):
-        print(allPC[5])
-        allPC[5] = rotate(allPC[5])
-   
 
 if __name__ == '__main__':
     main()
