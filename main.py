@@ -81,17 +81,17 @@ class Pentamino:
     def __str__(self):
         col = colorNums.colors[self.id]
         black = bcolors.Black
-        ret = ""
-        ret += col
+        ret = "-\n"
+#        ret += col
         for row in self.shape:
             for i in row:
-                if i == '0':
-                    ret += black
-                    ret += '.'
-                else:
-                    ret += col
-                    ret += '*'
-#                ret += i
+#                if i == '0':
+#                    ret += black
+#                    ret += '.'
+#                else:
+#                    ret += col
+#                    ret += '*'
+                ret += i
             ret += "\n"
         ret += bcolors.ResetAll
         return ret
@@ -117,9 +117,12 @@ class board:
         ret += "---+" * self.size
         ret += "\n"
         ret += str(self.board)
+        ret += "\n"
+        for p in self.pentas:
+            ret += str(p)
         return ret
     
-    
+
     
     
 
@@ -186,20 +189,24 @@ def main():
 #        print(i)
 
     b = board(4,[allPC[4],allPC[5],allPC[11]])
-    print(b)
+    #print(b)
+    
+    
     
     
 #    for i in b.pentas:
 #        print(i)
+#
+    
+    for p in allPC:
+        for i in range(4):
+            p = rotate(p)
+            print(p)
 
-    for i in range(4):
-        allPC[3] = rotate(allPC[3])
-        print(allPC[3])
-
-    allPC[5] = transpose(allPC[5])
-    for i in range(4):
-        print(allPC[5])
-        allPC[5] = rotate(allPC[5])
+        p = transpose(p)
+        for i in range(4):
+            print(p)
+            p = rotate(p)
    
 
 if __name__ == '__main__':
