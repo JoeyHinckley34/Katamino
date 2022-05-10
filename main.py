@@ -84,19 +84,38 @@ class Pentamino:
         ret = "-\n"
 #        ret += col
         for row in self.shape:
+           # print(type(row))
             for i in row:
-#                if i == '0':
-#                    ret += black
-#                    ret += '.'
-#                else:
-#                    ret += col
-#                    ret += '*'
-                ret += i
+                if i == '0':
+                    ret += black
+                    ret += '.'
+                else:
+                    ret += col
+                    ret += '*'
+#                ret += i
             ret += "\n"
+#        for i in self.shape[-1]:
+#            ret += col
+#            ret += '*'
+#            ret += i
         ret += bcolors.ResetAll
         return ret
         
+    def __eq__(self,obj):
+        return isinstance(obj,Pentamino) and self.shape == obj.shape
         
+    def __hash__(self):
+        h = 0
+        bin  = ''
+        #loop through all rows of the penatmino
+        for row in self.shape:
+            #adds the hash of the rows 0's and 1's in binary to h
+            for i in row:
+                bin+= i
+            h += int(bin, base=2)
+            bin = ''
+        return hash(h)
+#
 class board:
     def __init__(self,_size,_pentas):
         self.size = _size
@@ -121,9 +140,6 @@ class board:
         for p in self.pentas:
             ret += str(p)
         return ret
-    
-
-    
     
 
 
@@ -171,8 +187,35 @@ def transpose (pentamino):
             
     return Pentamino(news,pentamino.id)
 
+#@param allPC: List of Pentamino objects
+#@returns allIters: The set of all possible orientations of all the Pentamino objects in allPC
+def generateAllIters(allPC):
+    allIters = set()
+    for p in allPC:
+        for i in range(4):
+            p = rotate(p)
+            allIters.add(p)
+            
+        p = transpose(p)
+        allIters.add(p)
 
-
+        for i in range(4):
+            p = rotate(p)
+            allIters.add(p)
+    return allIters
+    
+#@param allIters: Set of Pentamino objects
+#@returns allDict: Dictionary Object
+#                  -keys = all pentamino id's which appear in allIters
+#                   -values = all Pentaminos in allIters with an id matching that matches the key
+def generateAllDict(allIters):
+    allDict = {}
+    for i in allIters:
+        if i.id in allDict.keys():
+            allDict[i.id].append(i)
+        else:
+            allDict[i.id] = [i]
+    return allDict
 
 def main():
     #list of all pentaminoes
@@ -188,26 +231,30 @@ def main():
 #    for i in allPC:
 #        print(i)
 
-    b = board(4,[allPC[4],allPC[5],allPC[11]])
+#  c  b = board(4,[allPC[4],allPC[5],allPC[11]])
     #print(b)
-    
-    
-    
     
 #    for i in b.pentas:
 #        print(i)
 #
     
-    for p in allPC:
-        for i in range(4):
-            p = rotate(p)
-            print(p)
-
-        p = transpose(p)
-        for i in range(4):
-            print(p)
-            p = rotate(p)
-   
+    
+    #All possible iterations of all Pentaminoes
+    allIters = generateAllIters(allPC)
+    
+#    print("Set of all pentaminoes variations")
+#    for i in allIters:
+#        print(i)
+        
+        
+    allDict = generateAllDict(allIters)
+    print("JUICY Dictionary")
+    for key,value in sorted(allDict.items()):
+        print(key)
+        for i in value:
+            print(i)
+    
+    
 
 if __name__ == '__main__':
     main()
