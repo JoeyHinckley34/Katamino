@@ -127,7 +127,8 @@ class board:
         x = 0
         y = 0
         for i in range(len(self.pentas)):
-            print("Now on shape: ", i, "\n", self.pentas[i])
+            print(f"Now on shape: {i}")
+            print(self.pentas[i])
             
             found = False
             while (y < len(self.board)):
@@ -247,6 +248,10 @@ def main():
 #
 #    for i in allPC:
 #        print(i)
+
+#    print(allPC[4])
+#    print(allPC[5])
+#    print(allPC[11])
 
     b = board(4,[allPC[4],allPC[5],allPC[11]])
     b.solve()
