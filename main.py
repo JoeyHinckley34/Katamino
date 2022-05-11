@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class bcolors:
     ResetAll = "\033[0m"
 
@@ -68,6 +69,15 @@ class colorNums:
                 bcolors.LightGreen,
             ]
 
+class hashingVals:
+    hashes = {  10 : 'a',
+                11 : 'b',
+                12 : 'c',
+                13 : 'd',
+                14 : 'e',
+                15 : 'f',
+                31 : '0'
+            }
 
 class Pentamino:
     def __init__(self, _shape, _id):
@@ -77,6 +87,8 @@ class Pentamino:
         self.wid = len(self.shape)
 #        self.shapes =
 
+#    def __init__(self, hash):
+        
 
     def __str__(self):
         col = colorNums.colors[self.id]
@@ -99,22 +111,64 @@ class Pentamino:
 #            ret += '*'
 #            ret += i
         ret += bcolors.ResetAll
+#        ret += self.hash()
         return ret
         
     def __eq__(self,obj):
         return isinstance(obj,Pentamino) and self.shape == obj.shape
         
+    #Go hashing.txt to get a full walk through of how we hash Pentaminos
     def __hash__(self):
-        h = 0
+        #Checkes if id is greater than 9
+        if ( self.id > 9):
+            h1 = str(hashingVals.hashes.get(self.id))
+        else:
+            h1 = str(self.id)
+        h1 += str(self.len) + str(self.wid)
         bin  = ''
         #loop through all rows of the penatmino
         for row in self.shape:
             #adds the hash of the rows 0's and 1's in binary to h
             for i in row:
-                bin+= i
-            h += int(bin, base=2)
+                bin += i
+            
+            h = int(bin, base=2)
+            
+            if ( h > 9 ):
+                h1 += hashingVals.hashes.get(h)
+            else:
+                h1 += str(h)
             bin = ''
-        return hash(h)
+        return hash(h1)
+        
+    def __lt__(self,other):
+        return self.id < other.id
+    
+        
+    #@returns h1 : returns the hash value we generate to give to the hash() function
+    def gethash(self):
+        #Checkes if id is greater than 9
+        if ( self.id > 9):
+            h1 = str(hashingVals.hashes.get(self.id))
+        else:
+            h1 = str(self.id)
+        h1 += str(self.len) + str(self.wid)
+        bin  = ''
+        #loop through all rows of the penatmino
+        for row in self.shape:
+            #adds the hash of the rows 0's and 1's in binary to h
+            for i in row:
+                bin += i
+            #Checkes if values is greater than 9
+            if ( int(bin,base=2) > 9 ):
+                h1 += hashingVals.hashes.get(int(bin,base=2))
+            else:
+                h1 += str(int(bin,base=2))
+#            print(f'h: {h} bin: {bin} ')
+            bin = ''
+#        print(f'{h1}')
+      #  print(f' h1 hashed:  {hash(h1)}')
+        return h1
 #
 class board:
     def __init__(self,_size,_pentas):
@@ -227,6 +281,11 @@ def main():
     for i in allPentas:
         allPC.append(Pentamino(i,x))
         x += 1
+    
+    
+    
+
+
 #
 #    for i in allPC:
 #        print(i)
@@ -243,17 +302,21 @@ def main():
     allIters = generateAllIters(allPC)
     
 #    print("Set of all pentaminoes variations")
-#    for i in allIters:
+#    for i in sorted(allIters):
 #        print(i)
-        
+#        print(f'HASH VALUE: {i.gethash()}')
+#
         
     allDict = generateAllDict(allIters)
-    print("JUICY Dictionary")
+#    print("JUICY Dictionary")
     for key,value in sorted(allDict.items()):
-        print(key)
+
+#        print(f'Pentanmino ID: {key} ')
         for i in value:
-            print(i)
-    
+#            print(i)
+            print(i.gethash())
+#            print(hash(i))
+
     
 
 if __name__ == '__main__':

@@ -1,0 +1,66 @@
+This is how Pentamino's are hashed and unhashed:
+
+The class Pentamino is representative of any 2d shape that can be made with five squares:
+
+Each Penatamino will have a Shape, width, and length
+	width,length: the demnsions of the smallest rectangle that can fit the whole Pentamino
+	shape: a series of 1's and 0's, 1 if there and 0 if not
+
+Examples:
+11111
+
+010
+111
+001
+
+01
+11
+01
+01
+
+The hash of a Pentamino will be a number generated as follows:
+
+The first number will be the Penatminos id 0-11.
+for 10 and 11 we use a and b
+The id's of the examples above:
+6
+7
+5
+
+Then leading two number will be the width and length of the Penatmino.
+The starting three digits of the 3 example pentamino's hashes
+651
+733
+524
+
+Then each row of the shape is read as a whole string and converted into binary.
+31
+
+2
+7
+1
+
+1
+3
+1
+1
+If it is less than ten it is added onto the has as is.
+These are the conversion for all the numbers with two digits:
+10: a
+11: b
+12: c
+13: d
+14: e
+15: f
+31: 0 <- There is never a row with zero, so we will use it for 31 instead
+
+The hashes of the examples so far:
+6510
+733271
+5241311
+
+Then we feed this number to pythons built in hash() function to get our final hashes.
+
+
+
+
