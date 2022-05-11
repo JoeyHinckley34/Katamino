@@ -69,6 +69,81 @@ class colorNums:
                 bcolors.LightGreen,
             ]
 
+class BinConvert:
+    toBinary1 =  {  0 : '0',
+                    1 : '1'
+                }
+
+    toBinary2 = {   0 : '00',
+                    1 : '01',
+                    2 : '10',
+                    3 : '11'
+                }
+    toBinary3 = {   0 : '000',
+                    1 : '001',
+                    2 : '010',
+                    3 : '011',
+                    4 : '100',
+                    5 : '101',
+                    6 : '110',
+                    7 : '111'
+                }
+    
+    toBinary4 = {   0 : '0000',
+                    1 : '0001',
+                    2 : '0010',
+                    3 : '0011',
+                    4 : '0100',
+                    5 : '0101',
+                    6 : '0110',
+                    7 : '0111',
+                    8 : '1000',
+                    9 : '1001',
+                    10 : '1010',
+                    11 : '1011',
+                    12 : '1100',
+                    13 : '1101',
+                    14 : '1110',
+                    15 : '1111'
+                }
+    toBinary5 = {   0 : '00000',
+                    1 : '00001',
+                    2 : '00010',
+                    3 : '00011',
+                    4 : '00100',
+                    5 : '00101',
+                    6 : '00110',
+                    7 : '00111',
+                    8 : '01000',
+                    9 : '01001',
+                    10 : '01010',
+                    11 : '01011',
+                    12 : '01100',
+                    13 : '01101',
+                    14 : '01110',
+                    15 : '01111',
+                    16 : '10000',
+                    17 : '10001',
+                    18 : '10010',
+                    19 : '10011',
+                    20 : '10100',
+                    21 : '10101',
+                    22 : '10110',
+                    23 : '10111',
+                    24 : '11000',
+                    25 : '11001',
+                    26 : '11010',
+                    27 : '11011',
+                    28 : '11100',
+                    29 : '11101',
+                    30 : '11110',
+                    31 : '11111'
+                }
+
+
+
+
+
 class hashingVals:
     hashes = {  10 : 'a',
                 11 : 'b',
@@ -76,25 +151,77 @@ class hashingVals:
                 13 : 'd',
                 14 : 'e',
                 15 : 'f',
-                31 : '0'
+                31 : 'g'
             }
+            
+    hashback =  {   '0' : 0,
+                    '1' : 1,
+                    '2' : 2,
+                    '3' : 3,
+                    '4' : 4,
+                    '5' : 5,
+                    '6' : 6,
+                    '7' : 7,
+                    '8' : 8,
+                    '9' : 9,
+                    'a' : 10,
+                    'b' : 11,
+                    'c' : 12,
+                    'd' : 13,
+                    'e' : 14,
+                    'f' : 15,
+                    'g' : 31
+                }
 
 class Pentamino:
-    def __init__(self, _shape, _id):
-        self.shape = _shape
-        self.id = _id
-        self.len = len(self.shape[0])
-        self.wid = len(self.shape)
-#        self.shapes =
+#    def __init__(self, _shape, _id):
+#        self.shape = _shape
+#        self.id = _id
+#        self.len = len(self.shape[0])
+#        self.wid = len(self.shape)
+##        self.shapes =
 
-#    def __init__(self, hash):
+
+    #NEW and "imporved" hash
+    def __init__(self, hash):
+        self.id = hashingVals.hashback.get(hash[0])
+        self.len = int(hash[1])
+        self.wid = int(hash[2])
+        self.shape = []
+        self.h = hash
+        for i in range(self.wid):
+            if(self.len == 1 ):
+                bin = BinConvert.toBinary1.get( hashingVals.hashback.get(hash[3+i]))
+                self.shape.append([k for k in bin])
+            elif(self.len == 2 ):
+                bin = BinConvert.toBinary2.get( hashingVals.hashback.get(hash[3+i]))
+                self.shape.append([k for k in bin])
+            elif(self.len == 3 ):
+                bin = BinConvert.toBinary3.get( hashingVals.hashback.get(hash[3+i]))
+                self.shape.append([k for k in bin])
+            elif(self.len == 4 ):
+                bin = BinConvert.toBinary4.get( hashingVals.hashback.get(hash[3+i]))
+                self.shape.append([k for k in bin])
+            elif(self.len == 5 ):
+                bin = BinConvert.toBinary5.get( hashingVals.hashback.get(hash[3+i]))
+                self.shape.append([k for k in bin])
+            else :
+                self.shape = [[0 for k in range(self.len)] for j in range(self.wid)]
         
+                
+#            print( BinConvert.toBinary1.get( hashingVals.hashback.get(hash[3+i])))
+        
+        
+    
 
     def __str__(self):
+        
         col = colorNums.colors[self.id]
         black = bcolors.Black
         ret = "-\n"
+#        ret += str(self.id)
 #        ret += col
+#        ret += f'len : {self.len}\nwid : {self.wid}\n'
         for row in self.shape:
            # print(type(row))
             for i in row:
@@ -111,7 +238,7 @@ class Pentamino:
 #            ret += '*'
 #            ret += i
         ret += bcolors.ResetAll
-#        ret += self.hash()
+#        ret += self.h
         return ret
         
     def __eq__(self,obj):
@@ -271,20 +398,43 @@ def generateAllDict(allIters):
             allDict[i.id] = [i]
     return allDict
 
-def main():
-    #list of all pentaminoes
-    #3d array
-    allPentas = getPentas('Pentamino.txt')
-    #list of all pentamino objects
-    allPC = []
-    x = 0
-    for i in allPentas:
-        allPC.append(Pentamino(i,x))
-        x += 1
-    
-    
+
+#@param filename : filename we are reading in 'hashedPentas.txt'
+#@returns allPentas: Array of all pentaminoes
+def getPentasFromHash(filename):
+    #opens file and reads it line by line
+    with open(filename,'r') as myfile:
+        data = myfile.read().splitlines()
+    #Varibables
+    allPentas = []
+    penta = []
+    #loop through all lines in .txt file
+    for d in data:
+        allPentas.append(Pentamino(d))
+    return allPentas
     
 
+def main():
+    #list of all pentaminoes
+#    #3d array
+#    allPentas = getPentas('Pentamino.txt')
+#    #list of all pentamino objects
+#    allPC = []
+#    x = 0
+#    for i in allPentas:
+#        allPC.append(Pentamino(i,x))
+#        x += 1
+#
+    
+    #Getting Pentamios from hashees:
+    allPentas = getPentasFromHash('hashedPentas.txt')
+    for i in allPentas:
+        #Checking if hashvalues match what is expected
+        print(f' input hash: {i.h} calculated hash {i.gethash()} \t MATCH {i.h==i.gethash()}')
+        print(i)
+
+
+#    print(BinConvert.toBinary5.get(31))
 
 #
 #    for i in allPC:
@@ -298,23 +448,23 @@ def main():
 #
     
     
-    #All possible iterations of all Pentaminoes
-    allIters = generateAllIters(allPC)
-    
-#    print("Set of all pentaminoes variations")
-#    for i in sorted(allIters):
-#        print(i)
-#        print(f'HASH VALUE: {i.gethash()}')
+#    #All possible iterations of all Pentaminoes
+#    allIters = generateAllIters(allPC)
 #
-        
-    allDict = generateAllDict(allIters)
-#    print("JUICY Dictionary")
-    for key,value in sorted(allDict.items()):
-
-#        print(f'Pentanmino ID: {key} ')
-        for i in value:
-#            print(i)
-            print(i.gethash())
+##    print("Set of all pentaminoes variations")
+##    for i in sorted(allIters):
+##        print(i)
+##        print(f'HASH VALUE: {i.gethash()}')
+##
+#
+#    allDict = generateAllDict(allIters)
+##    print("JUICY Dictionary")
+#    for key,value in sorted(allDict.items()):
+#
+##        print(f'Pentanmino ID: {key} ')
+#        for i in value:
+##            print(i)
+#            print(i.gethash())
 #            print(hash(i))
 
     

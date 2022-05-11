@@ -52,10 +52,10 @@ These are the conversion for all the numbers with two digits:
 13: d
 14: e
 15: f
-31: 0 <- There is never a row with zero, so we will use it for 31 instead
+31: g
 
 The hashes of the examples so far:
-6510
+651g
 733271
 5241311
 
