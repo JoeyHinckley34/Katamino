@@ -174,15 +174,7 @@ class hashingVals:
                 }
 
 class Pentamino:
-#    def __init__(self, _shape, _id):
-#        self.shape = _shape
-#        self.id = _id
-#        self.len = len(self.shape[0])
-#        self.wid = len(self.shape)
-##        self.shapes =
-
-
-    #NEW and "imporved" hash
+    #NEW and "imporved" intitailizatioon from hash
     def __init__(self, hash):
         self.id = hashingVals.hashback.get(hash[0])
         self.len = int(hash[1])
@@ -206,13 +198,14 @@ class Pentamino:
                 bin = BinConvert.toBinary5.get( hashingVals.hashback.get(hash[3+i]))
                 self.shape.append([k for k in bin])
             else :
-                self.shape = [[0 for k in range(self.len)] for j in range(self.wid)]
+                self.shape = "FAIL!!"
         
-                
-#            print( BinConvert.toBinary1.get( hashingVals.hashback.get(hash[3+i])))
-        
-        
-    
+#   OLD LAME INIT Gross !
+#    def __init__(self, _shape, _id):
+#        self.shape = _shape
+#        self.id = _id
+#        self.len = len(self.shape[0])
+#        self.wid = len(self.shape)
 
     def __str__(self):
         
@@ -297,6 +290,22 @@ class Pentamino:
       #  print(f' h1 hashed:  {hash(h1)}')
         return h1
 #
+
+
+#Class to hold all varations of a penta
+class PentaContainer:
+    def __init__(self, _pentas):
+        self.pentas = _pentas
+        
+    def __str__(self):
+        ret = ''
+        
+        for i in self.pentas:
+            ret += str(i)
+        
+        return ret
+
+
 class board:
     def __init__(self,_size,_pentas):
         self.size = _size
@@ -321,6 +330,62 @@ class board:
         for p in self.pentas:
             ret += str(p)
         return ret
+
+    def notSolved(self):
+        for row in self.board:
+            for i in row:
+                if i != 1:
+                    return True
+        return False
+
+
+    def solve(self):
+        print("SOLVING")
+    
+        #the xy cordinates of each of the pentaminoes
+        pos_x = [0 for i in range(self.size)]
+        pos_y = [0 for i in range(self.size)]
+        
+        #the iteration of the pentamino
+        currIter = [0 for i in range(self.size)]
+        
+#        for curp
+
+
+        for c in range(len(self.pentas)):
+            #loop through all iterations of the Pentamino
+            for i in range(len(self.pentas[c].pentas)):
+                self.board = [[0 for j in range(self.size)]for i in range(5)]
+                #loop through all pentaminos
+                print(currIter)
+                for p in range(len(self.pentas[:1])):
+                    print( self.pentas[p].pentas[currIter[p]])
+                    #loop through the shape of the current pentamino
+                    for x in range(self.pentas[p].pentas[currIter[p]].wid):
+                        for y in range(self.pentas[p].pentas[currIter[p]].len):
+    #                        print(f'x: {x} y: {y}')
+    #                        print(f'pos_x[p]+x {pos_x[p]+x} pos_y[p]+y {pos_y[p]+y}')
+        #                       print(len(self.board))
+        
+                            #if the current position is outside the bounds of the board dont place
+                            if ((pos_x[p]+x) > 5 or (pos_y[p]+y) > self.size-1 ):
+                                pass
+                            #if the current position exists in the bounds of the board then place
+                            else:
+                                self.board[pos_x[p]+x][pos_y[p]+y] += int(self.pentas[p].pentas[currIter[p]].shape[x][y])
+        #                        print(self.pentas[p].pentas[currIter[p]])
+                
+                currIter[c] += 1
+                print(self)
+            currIter[c] = 0
+            
+        
+        
+#            print(self.pentas[p].pentas[currIter[p]])
+#            print(self.pentas[p].pentas[currIter[p]].len)
+
+            
+        
     
 
 
@@ -412,6 +477,17 @@ def getPentasFromHash(filename):
     for d in data:
         allPentas.append(Pentamino(d))
     return allPentas
+
+#@param allDict: Dictionary Object
+#                  -keys = all pentamino id's
+#                   -values = all iterations of the Pentamino with an id matching that matches the key
+#@returns Pentas: list of PentaContainer class objects
+def DictToPentas(allDict):
+    Pentas = []
+    for key,value in sorted(allDict.items()):
+#        print(f'Pentanmino ID: {key} ')
+        Pentas.append(PentaContainer(value))
+    return Pentas
     
 
 def main():
@@ -428,10 +504,11 @@ def main():
     
     #Getting Pentamios from hashees:
     allPentas = getPentasFromHash('hashedPentas.txt')
-    for i in allPentas:
-        #Checking if hashvalues match what is expected
-        print(f' input hash: {i.h} calculated hash {i.gethash()} \t MATCH {i.h==i.gethash()}')
-        print(i)
+    
+#    for i in allPentas:
+#        #Checking if hashvalues match what is expected
+#        print(f' input hash: {i.h} calculated hash {i.gethash()} \t MATCH {i.h==i.gethash()}')
+#        print(i)
 
 
 #    print(BinConvert.toBinary5.get(31))
@@ -440,8 +517,7 @@ def main():
 #    for i in allPC:
 #        print(i)
 
-#  c  b = board(4,[allPC[4],allPC[5],allPC[11]])
-    #print(b)
+
     
 #    for i in b.pentas:
 #        print(i)
@@ -457,15 +533,27 @@ def main():
 ##        print(f'HASH VALUE: {i.gethash()}')
 ##
 #
-#    allDict = generateAllDict(allIters)
-##    print("JUICY Dictionary")
+    allDict = generateAllDict(allPentas)
+#    print("JUICY Dictionary")
 #    for key,value in sorted(allDict.items()):
-#
 ##        print(f'Pentanmino ID: {key} ')
 #        for i in value:
-##            print(i)
-#            print(i.gethash())
-#            print(hash(i))
+#            print(i)
+
+#    print(allDict)
+    
+    allPents = DictToPentas(allDict)
+#
+#    for p in allPents:
+#        print(p)
+#
+    
+    
+    b = board(3,[allPents[4],allPents[5],allPents[11]])
+    print(b)
+
+    b.solve()
+    print(b)
 
     
 
