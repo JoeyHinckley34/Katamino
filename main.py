@@ -1,5 +1,6 @@
 import numpy as np
-
+import binary
+import itertools
 
 class bcolors:
     ResetAll = "\033[0m"
@@ -179,26 +180,40 @@ class Pentamino:
         self.id = hashingVals.hashback.get(hash[0])
         self.len = int(hash[1])
         self.wid = int(hash[2])
+        
         self.shape = []
+        self.shapeN = []
+        
         self.h = hash
+        self.mult = []
+        self.allPos = []
+        
+        self.number = hash[3:]
         for i in range(self.wid):
             if(self.len == 1 ):
                 bin = BinConvert.toBinary1.get( hashingVals.hashback.get(hash[3+i]))
                 self.shape.append([k for k in bin])
+                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
             elif(self.len == 2 ):
                 bin = BinConvert.toBinary2.get( hashingVals.hashback.get(hash[3+i]))
                 self.shape.append([k for k in bin])
+                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
             elif(self.len == 3 ):
                 bin = BinConvert.toBinary3.get( hashingVals.hashback.get(hash[3+i]))
                 self.shape.append([k for k in bin])
+                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
             elif(self.len == 4 ):
                 bin = BinConvert.toBinary4.get( hashingVals.hashback.get(hash[3+i]))
                 self.shape.append([k for k in bin])
+                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
             elif(self.len == 5 ):
                 bin = BinConvert.toBinary5.get( hashingVals.hashback.get(hash[3+i]))
                 self.shape.append([k for k in bin])
+                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
             else :
                 self.shape = "FAIL!!"
+            
+    
         
 #   OLD LAME INIT Gross !
 #    def __init__(self, _shape, _id):
@@ -208,13 +223,16 @@ class Pentamino:
 #        self.wid = len(self.shape)
 
     def __str__(self):
-        
         col = colorNums.colors[self.id]
         black = bcolors.Black
-        ret = "-\n"
+        ret = "\n"
 #        ret += str(self.id)
 #        ret += col
 #        ret += f'len : {self.len}\nwid : {self.wid}\n'
+        for i in self.shapeN:
+            ret += str(i)
+            ret += " "
+        ret += "\n"
         for row in self.shape:
            # print(type(row))
             for i in row:
@@ -231,7 +249,11 @@ class Pentamino:
 #            ret += '*'
 #            ret += i
         ret += bcolors.ResetAll
-#        ret += self.h
+        
+        ret += "HASH: "
+        ret += self.h
+#        ret += "\n"
+#        ret += str(self.mult)
         return ret
         
     def __eq__(self,obj):
@@ -264,6 +286,7 @@ class Pentamino:
     def __lt__(self,other):
         return self.id < other.id
     
+    
         
     #@returns h1 : returns the hash value we generate to give to the hash() function
     def gethash(self):
@@ -291,12 +314,22 @@ class Pentamino:
         return h1
 #
 
+    def getPositions(self, size):
+        for i in range(len(self.shape)):
+            self.shape[i].append(0)
+        self.shape.append([0 for j in range(size) for i in range(5-self.wid)])
+        print(self.shape)
+
+  
+        
+
 
 #Class to hold all varations of a penta
 class PentaContainer:
     def __init__(self, _pentas):
         self.pentas = _pentas
-        
+        self.Full = []
+
     def __str__(self):
         ret = ''
         
@@ -304,12 +337,17 @@ class PentaContainer:
             ret += str(i)
         
         return ret
+        
+        
+    
 
 
 class board:
     def __init__(self,_size,_pentas):
         self.size = _size
         self.pentas = _pentas
+        self.all = []
+        self.allmult = []
         self.board = [[0 for j in range(_size)]for i in range(5)]
         
         
@@ -384,9 +422,85 @@ class board:
 #            print(self.pentas[p].pentas[currIter[p]])
 #            print(self.pentas[p].pentas[currIter[p]].len)
 
-            
+         
+    def solve2 (self):
+        currIter = [0 for i in range(self.size)]
         
-    
+        for p in self.pentas:
+            for i in p.pentas:
+                print(i.h)
+                print(currIter)
+                
+                
+    def binSolver (self,allSol):
+        
+#        print(f'{self.pentas[p]}\nFULL: {self.pentas[p].Full}')
+
+        for p in  range(len(self.pentas)):
+            self.all.append(self.pentas[p].Full)
+            
+#        for a in self.all:
+#            for b in a:
+#                print (f'all {b}')
+            
+        for element in itertools.product(*self.all):
+            self.allmult.append(list(element))
+   
+#        for m  in self.allmult:
+#            for n in m:
+#                print (f'allmult {n}')
+#            print("\n")
+            
+        allSums = []
+        
+        for a in self.allmult:
+            for element in itertools.product(*a):
+                for e in itertools.product(*element):
+#                    print(e)
+                    Fit = True
+                    sums = [0 for i in range(5)]
+                    for x in range(len(e)):
+                        for y in range(len(e[x])):
+                            sums[y] += e[x][y]
+                            if( sums[y] > ((2 ** self.size)-1 ) ):
+                                Fit = False
+                                break
+#                        print(e[x])
+#                    print()
+                    
+                    
+                    if binary.checker(sums, (2 ** self.size)-1):
+                        allSums.append(e)
+                        if (not allSol):
+                            print('First Solution found: ')
+                            print(e)
+                            return
+                            
+                    elif Fit:
+                        pass
+#                        print(f' sums :{sums} {e}')
+                    else:
+                        pass
+#                        print("FAIL")
+#                        print(f'  sums :{sums} {element}')
+           
+           
+        if len(allSums) == 0:
+            print('no solutions found')
+        else:
+            print('SOLUTIONS: ')
+            for a in range(len(allSums)):
+                print(f'solution #{a}: {allSums[a]} ')
+        
+            
+            
+#                print(element)
+#                for e in element:
+#                    print(e)
+#                print()
+                
+   
+#        print(((2 ** int(self.size))-1 ))
 
 
 #@param filename : filename we are reading in 'Penatmino.txt'
@@ -491,9 +605,10 @@ def DictToPentas(allDict):
     
 
 def main():
-    #list of all pentaminoes
-#    #3d array
+    DEBUG = 0
+
 #    allPentas = getPentas('Pentamino.txt')
+
 #    #list of all pentamino objects
 #    allPC = []
 #    x = 0
@@ -502,59 +617,95 @@ def main():
 #        x += 1
 #
     
+#    #All possible iterations of all Pentaminoes
+#    allIters = generateAllIters(allPC)
+#    print("Set of all pentaminoes variations")
+#    for i in sorted(allIters):
+#        print(i)
+#        print(f'HASH VALUE: {i.gethash()}')
+
     #Getting Pentamios from hashees:
     allPentas = getPentasFromHash('hashedPentas.txt')
     
-#    for i in allPentas:
-#        #Checking if hashvalues match what is expected
-#        print(f' input hash: {i.h} calculated hash {i.gethash()} \t MATCH {i.h==i.gethash()}')
-#        print(i)
-
-
-#    print(BinConvert.toBinary5.get(31))
-
-#
-#    for i in allPC:
-#        print(i)
-
-
     
-#    for i in b.pentas:
-#        print(i)
-#
-    
-    
-#    #All possible iterations of all Pentaminoes
-#    allIters = generateAllIters(allPC)
-#
-##    print("Set of all pentaminoes variations")
-##    for i in sorted(allIters):
-##        print(i)
-##        print(f'HASH VALUE: {i.gethash()}')
-##
-#
+    if(DEBUG):
+        for i in allPentas:
+            #Checking if hashvalues match what is expected
+            print(f' input hash: {i.h} calculated hash {i.gethash()} \t MATCH {i.h==i.gethash()}')
+            print(i)
+
+
     allDict = generateAllDict(allPentas)
-#    print("JUICY Dictionary")
-#    for key,value in sorted(allDict.items()):
-##        print(f'Pentanmino ID: {key} ')
-#        for i in value:
-#            print(i)
+    if(DEBUG):
+        print("JUICY Dictionary")
+        for key,value in sorted(allDict.items()):
+    #        print(f'Pentanmino ID: {key} ')
+            for i in value:
+                print(i)
 
-#    print(allDict)
+#        print(allDict)
     
     allPents = DictToPentas(allDict)
-#
-#    for p in allPents:
-#        print(p)
-#
+
+    if(DEBUG):
+        numFixed = 0
+        for p in allPents:
+            numFixed += len(p.pentas)
+            print(p)
+        print(f'Number of fixed pentaminoes: {numFixed} \nNumber of free pentaminoes:  {len(allPents)}')
     
     
+    
+    #Loop through all Pents calculate their
+    cop = 0
+    for p in range(len(allPents)):
+        for q in range(len(allPents[p].pentas)):
+            cop += 1
+            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,4) #<--- Change to maximum board size
+            for m in allPents[p].pentas[q].mult:
+                allPents[p].pentas[q].allPos.append(binary.addzeros(m,5))
+            if(DEBUG):
+          
+                print(f'{cop}: \t{allPents[p].pentas[q].mult} \n\t{allPents[p].pentas[q].allPos} ')
+  
+    for p in range(len(allPents)):
+        for q in range(len(allPents[p].pentas)):
+#                print(self.pentas[p].pentas[q])
+#                print(self.pentas[p].pentas[q].allPos)
+                allPents[p].Full.append((allPents[p].pentas[q].allPos))
+            
+  
+####TEST WITH 1
+#    print(allPents[4])
+    one = board(1,[allPents[4]])
+#    print(one)
+    one.binSolver(1)
+
+####TEST WITH 3
     b = board(3,[allPents[4],allPents[5],allPents[11]])
-    print(b)
+    b.binSolver(1)
+    
+######TEST WITH 4
+    b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
+    b.binSolver(0)
 
-    b.solve()
-    print(b)
+#####TEST WITH 5
+#    b = board(5,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3]])
+##    print(b.pentas[0].pentas[0])
+#    b.binSolver(0)
+    
+###TEST WITH 6
+#    b = board(6,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3],allPents[9]])
+#    print(b.pentas[0].pentas[0])
+#    b.binSolver(0)
 
+#    print(b)
+
+
+#    allPents[4].pentas[0].getPositions(3)
+
+#    b.solve2()
+#    print(b)
     
 
 if __name__ == '__main__':
