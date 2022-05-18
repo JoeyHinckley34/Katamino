@@ -371,14 +371,13 @@ class board:
         ret += "+"
         ret += "---+" * self.size
         ret += "\n"
-        ret += str(self.board)
-        ret += "\n"
         
+#        ret += str(self.board)
+#        ret += "\n"
         
-        
-#        for p in self.pentas:
-#            ret += str(p)
-#
+        for p in self.pentas:
+            ret += str(p)
+
 #
         return ret
 
@@ -528,7 +527,8 @@ class board:
            
            
         if len(allSums) == 0:
-            print('no solutions found')
+            pass
+#            print('no solutions found')
         else:
             print('SOLUTIONS: ')
             for x in range(len(allSums)):
@@ -730,7 +730,7 @@ def main():
     for p in range(len(allPents)):
         for q in range(len(allPents[p].pentas)):
             cop += 1
-            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,4) #<--- Change to maximum board size
+            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,3) #<--- Change to maximum board size
             for m in allPents[p].pentas[q].mult:
                 allPents[p].pentas[q].allPos.append(binary.addzeros(m,5))
             if(DEBUG):
@@ -746,17 +746,17 @@ def main():
   
 ####TEST WITH 1
 #    print(allPents[4])
-    one = board(1,[allPents[4]])
+#    one = board(1,[allPents[4]])
 #    print(one)
 #    one.binSolver(1)
 
 ####TEST WITH 3
-    b = board(3,[allPents[4],allPents[5],allPents[11]])
-    b.binSolver(1)
+#    b = board(3,[allPents[4],allPents[5],allPents[11]])
+#    b.binSolver(1)
     
 ######TEST WITH 4
-    b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
-    b.binSolver(0)
+#    b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
+#    b.binSolver(0)
 
 #####TEST WITH 5
 #    b = board(5,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3]])
@@ -769,6 +769,17 @@ def main():
 
 #    print(b)
 
+##TEST WITH all possible 3
+    allThree = list(itertools.combinations(allPents,3))
+    for a in range(len(allThree)):
+        b = board(3,list(allThree[a])[:])
+        b.binSolver(1)
+###TEST WITH all possible 4
+#    allThree = list(itertools.combinations(allPents,4))
+#    for a in range(len(allThree)):
+#        b = board(4,list(allThree[a])[:])
+#        b.binSolver(0)
+#
 
 #    allPents[4].pentas[0].getPositions(3)
 
