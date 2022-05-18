@@ -174,6 +174,14 @@ class hashingVals:
                     'g' : 31
                 }
 
+def dec_to_bin(x):
+    return int(bin(x)[2:])
+
+def dec_to_bin_zeros(x,z):
+    return f'{int(bin(x)[2:]):03}'
+
+
+
 class Pentamino:
     #NEW and "imporved" intitailizatioon from hash
     def __init__(self, hash):
@@ -365,8 +373,13 @@ class board:
         ret += "\n"
         ret += str(self.board)
         ret += "\n"
-        for p in self.pentas:
-            ret += str(p)
+        
+        
+        
+#        for p in self.pentas:
+#            ret += str(p)
+#
+#
         return ret
 
     def notSolved(self):
@@ -431,7 +444,9 @@ class board:
                 print(i.h)
                 print(currIter)
                 
-                
+     
+    
+     
     def binSolver (self,allSol):
         
 #        print(f'{self.pentas[p]}\nFULL: {self.pentas[p].Full}')
@@ -489,10 +504,32 @@ class board:
             print('no solutions found')
         else:
             print('SOLUTIONS: ')
-            for a in range(len(allSums)):
-                print(f'solution #{a}: {allSums[a]} ')
-        
             
+           
+            
+            for a in range(len(allSums)):
+                rows = [[] for _ in range(5)]
+#                print(allSums[a])
+                for b in range(len(allSums[a])):
+#                    print(allSums[a][b])
+                    for c in range(5):
+                        rows[c].append( dec_to_bin_zeros(allSums[a][b][c],3 ) )
+#                    print(b)
+                for a in rows:
+                    for b in a  :
+                        for c in b:
+                            if c == '0':
+                                print('.',end=' ')
+                            else:
+                                print('*',end=' ')
+                        print('\t',end ='')
+                    print()
+#                print(rows)
+                print()
+#                print(f'solution #{a}: {int(bin(allSums[a])[2:])} ')
+          
+            
+        
             
 #                print(element)
 #                for e in element:
@@ -632,7 +669,7 @@ def main():
         for i in allPentas:
             #Checking if hashvalues match what is expected
             print(f' input hash: {i.h} calculated hash {i.gethash()} \t MATCH {i.h==i.gethash()}')
-            print(i)
+#            print(i)
 
 
     allDict = generateAllDict(allPentas)
@@ -651,7 +688,7 @@ def main():
         numFixed = 0
         for p in allPents:
             numFixed += len(p.pentas)
-            print(p)
+#            print(p)
         print(f'Number of fixed pentaminoes: {numFixed} \nNumber of free pentaminoes:  {len(allPents)}')
     
     
@@ -661,7 +698,7 @@ def main():
     for p in range(len(allPents)):
         for q in range(len(allPents[p].pentas)):
             cop += 1
-            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,4) #<--- Change to maximum board size
+            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,3) #<--- Change to maximum board size
             for m in allPents[p].pentas[q].mult:
                 allPents[p].pentas[q].allPos.append(binary.addzeros(m,5))
             if(DEBUG):
@@ -679,7 +716,7 @@ def main():
 #    print(allPents[4])
     one = board(1,[allPents[4]])
 #    print(one)
-    one.binSolver(1)
+#    one.binSolver(1)
 
 ####TEST WITH 3
     b = board(3,[allPents[4],allPents[5],allPents[11]])
@@ -687,16 +724,15 @@ def main():
     
 ######TEST WITH 4
     b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
-    b.binSolver(0)
+#    b.binSolver(0)
 
 #####TEST WITH 5
 #    b = board(5,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3]])
 ##    print(b.pentas[0].pentas[0])
 #    b.binSolver(0)
     
-###TEST WITH 6
+##TEST WITH 6
 #    b = board(6,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3],allPents[9]])
-#    print(b.pentas[0].pentas[0])
 #    b.binSolver(0)
 
 #    print(b)
