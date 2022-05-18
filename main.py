@@ -178,7 +178,7 @@ def dec_to_bin(x):
     return int(bin(x)[2:])
 
 def dec_to_bin_zeros(x,z):
-    return f'{int(bin(x)[2:]):03}'
+    return f'{int(bin(x)[2:]):0{z}}'
 
 
 
@@ -487,8 +487,35 @@ class board:
                     if binary.checker(sums, (2 ** self.size)-1):
                         allSums.append(e)
                         if (not allSol):
+                        
                             print('First Solution found: ')
-                            print(e)
+                            print( ('+' + '---' * self.size +'--+   ') * self.size +  '| ROW SUM ')
+                            rows = [[] for _ in range(5)]
+            #                print(allSums[a])
+                            for b in range(len(e)):
+            #                    print(allSums[a][b])
+                                for c in range(5):
+                                    rows[c].append( dec_to_bin_zeros(e[b][c],self.size ) )
+            #                    print(b)
+                            counter = 0
+                            for a in rows:
+                                print('|',end=' ')
+                                for b in range(len(a)) :
+                                    col = colorNums.colors[b]
+                                    black = bcolors.Black
+                                    reset  =  bcolors.ResetAll
+                                    for c in range(len(a[b])):
+                                        if a[b][c] == '0':
+                                            print(black,'.',end=' ')
+                                        else:
+                                            print(col,'*',end=' ')
+                                    print(reset,'|   | ',end ='')
+                                print((2**self.size)-1)
+            #                print(rows)
+                            print(bcolors.ResetAll,end='')
+                            print( ('+' + '---' * self.size +'--+   ') * self.size)
+                            
+                            
                             return
                             
                     elif Fit:
@@ -504,28 +531,33 @@ class board:
             print('no solutions found')
         else:
             print('SOLUTIONS: ')
-            
-           
-            
-            for a in range(len(allSums)):
+            for x in range(len(allSums)):
+                print( ('+' + '---' * self.size +'--+\t') * self.size + '| ROW SUM ' )
                 rows = [[] for _ in range(5)]
 #                print(allSums[a])
-                for b in range(len(allSums[a])):
+                for b in range(len(allSums[x])):
 #                    print(allSums[a][b])
                     for c in range(5):
-                        rows[c].append( dec_to_bin_zeros(allSums[a][b][c],3 ) )
+                        rows[c].append( dec_to_bin_zeros(allSums[x][b][c],self.size ) )
 #                    print(b)
                 for a in rows:
-                    for b in a  :
-                        for c in b:
-                            if c == '0':
-                                print('.',end=' ')
+                    print('|',end=' ')
+                    for b in range(len(a)) :
+                        col = colorNums.colors[b]
+                        black = bcolors.Black
+                        reset  =  bcolors.ResetAll
+                        for c in range(len(a[b])):
+                            if a[b][c] == '0':
+                                print(black,'.',end=' ')
                             else:
-                                print('*',end=' ')
-                        print('\t',end ='')
-                    print()
+                                print(col,'*',end=' ')
+                        print(reset,'|   | ',end ='')
+                    print((2**self.size)-1)
+                
+                    
 #                print(rows)
-                print()
+                print( ('+' + '---' * self.size +'--+\t') * self.size)
+                print(bcolors.ResetAll,end='')
 #                print(f'solution #{a}: {int(bin(allSums[a])[2:])} ')
           
             
@@ -698,7 +730,7 @@ def main():
     for p in range(len(allPents)):
         for q in range(len(allPents[p].pentas)):
             cop += 1
-            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,3) #<--- Change to maximum board size
+            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,4) #<--- Change to maximum board size
             for m in allPents[p].pentas[q].mult:
                 allPents[p].pentas[q].allPos.append(binary.addzeros(m,5))
             if(DEBUG):
@@ -724,7 +756,7 @@ def main():
     
 ######TEST WITH 4
     b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
-#    b.binSolver(0)
+    b.binSolver(0)
 
 #####TEST WITH 5
 #    b = board(5,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3]])
