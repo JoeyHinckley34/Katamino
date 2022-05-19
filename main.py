@@ -1,186 +1,22 @@
+#Standard Imports
 import numpy as np
 import binary
 import itertools
+#Custom Imports
+from colors_util import bcolors, colorNums
+from hashing_util import BinConvert, hashingVals
 
-class bcolors:
-    ResetAll = "\033[0m"
-
-    Bold       = "\033[1m"
-    Dim        = "\033[2m"
-    Underlined = "\033[4m"
-    Blink      = "\033[5m"
-    Reverse    = "\033[7m"
-    Hidden     = "\033[8m"
-
-    ResetBold       = "\033[21m"
-    ResetDim        = "\033[22m"
-    ResetUnderlined = "\033[24m"
-    ResetBlink      = "\033[25m"
-    ResetReverse    = "\033[27m"
-    ResetHidden     = "\033[28m"
-
-    Default      = "\033[39m"
-    Black        = "\033[30m"
-    Red          = "\033[31m"
-    Green        = "\033[32m"
-    Yellow       = "\033[33m"
-    Blue         = "\033[34m"
-    Magenta      = "\033[35m"
-    Cyan         = "\033[36m"
-    LightGray    = "\033[37m"
-    DarkGray     = "\033[90m"
-    LightRed     = "\033[91m"
-    LightGreen   = "\033[92m"
-    LightYellow  = "\033[93m"
-    LightBlue    = "\033[94m"
-    LightMagenta = "\033[95m"
-    LightCyan    = "\033[96m"
-    White        = "\033[97m"
-
-    BackgroundDefault      = "\033[49m"
-    BackgroundBlack        = "\033[40m"
-    BackgroundRed          = "\033[41m"
-    BackgroundGreen        = "\033[42m"
-    BackgroundYellow       = "\033[43m"
-    BackgroundBlue         = "\033[44m"
-    BackgroundMagenta      = "\033[45m"
-    BackgroundCyan         = "\033[46m"
-    BackgroundLightGray    = "\033[47m"
-    BackgroundDarkGray     = "\033[100m"
-    BackgroundLightRed     = "\033[101m"
-    BackgroundLightGreen   = "\033[102m"
-    BackgroundLightYellow  = "\033[103m"
-    BackgroundLightBlue    = "\033[104m"
-    BackgroundLightMagenta = "\033[105m"
-    BackgroundLightCyan    = "\033[106m"
-    BackgroundWhite        = "\033[107m"
-
-class colorNums:
-    colors = [  bcolors.Blue,
-                bcolors.Magenta,
-                bcolors.Yellow,
-                bcolors.Green,
-                bcolors.Red,
-                bcolors.LightGray,
-                bcolors.Cyan,
-                bcolors.DarkGray,
-                bcolors.LightCyan,
-                bcolors.LightMagenta,
-                bcolors.LightRed,
-                bcolors.LightGreen,
-            ]
-
-class BinConvert:
-    toBinary1 =  {  0 : '0',
-                    1 : '1'
-                }
-
-    toBinary2 = {   0 : '00',
-                    1 : '01',
-                    2 : '10',
-                    3 : '11'
-                }
-    toBinary3 = {   0 : '000',
-                    1 : '001',
-                    2 : '010',
-                    3 : '011',
-                    4 : '100',
-                    5 : '101',
-                    6 : '110',
-                    7 : '111'
-                }
-    
-    toBinary4 = {   0 : '0000',
-                    1 : '0001',
-                    2 : '0010',
-                    3 : '0011',
-                    4 : '0100',
-                    5 : '0101',
-                    6 : '0110',
-                    7 : '0111',
-                    8 : '1000',
-                    9 : '1001',
-                    10 : '1010',
-                    11 : '1011',
-                    12 : '1100',
-                    13 : '1101',
-                    14 : '1110',
-                    15 : '1111'
-                }
-    toBinary5 = {   0 : '00000',
-                    1 : '00001',
-                    2 : '00010',
-                    3 : '00011',
-                    4 : '00100',
-                    5 : '00101',
-                    6 : '00110',
-                    7 : '00111',
-                    8 : '01000',
-                    9 : '01001',
-                    10 : '01010',
-                    11 : '01011',
-                    12 : '01100',
-                    13 : '01101',
-                    14 : '01110',
-                    15 : '01111',
-                    16 : '10000',
-                    17 : '10001',
-                    18 : '10010',
-                    19 : '10011',
-                    20 : '10100',
-                    21 : '10101',
-                    22 : '10110',
-                    23 : '10111',
-                    24 : '11000',
-                    25 : '11001',
-                    26 : '11010',
-                    27 : '11011',
-                    28 : '11100',
-                    29 : '11101',
-                    30 : '11110',
-                    31 : '11111'
-                }
-
-
-
-
-
-class hashingVals:
-    hashes = {  10 : 'a',
-                11 : 'b',
-                12 : 'c',
-                13 : 'd',
-                14 : 'e',
-                15 : 'f',
-                31 : 'g'
-            }
-            
-    hashback =  {   '0' : 0,
-                    '1' : 1,
-                    '2' : 2,
-                    '3' : 3,
-                    '4' : 4,
-                    '5' : 5,
-                    '6' : 6,
-                    '7' : 7,
-                    '8' : 8,
-                    '9' : 9,
-                    'a' : 10,
-                    'b' : 11,
-                    'c' : 12,
-                    'd' : 13,
-                    'e' : 14,
-                    'f' : 15,
-                    'g' : 31
-                }
-
+#HELPER FUNCTIONS
+#@param x : Number in base ten
+#@returns : x in binary
 def dec_to_bin(x):
     return int(bin(x)[2:])
 
+#@param x : Number to be converted to binary
+#@param z : Number of leading zeros
+#@returns : x in binary with z leaing zeros
 def dec_to_bin_zeros(x,z):
     return f'{int(bin(x)[2:]):0{z}}'
-
-
 
 class Pentamino:
     #NEW and "imporved" intitailizatioon from hash
@@ -198,37 +34,9 @@ class Pentamino:
         
         self.number = hash[3:]
         for i in range(self.wid):
-            if(self.len == 1 ):
-                bin = BinConvert.toBinary1.get( hashingVals.hashback.get(hash[3+i]))
-                self.shape.append([k for k in bin])
-                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
-            elif(self.len == 2 ):
-                bin = BinConvert.toBinary2.get( hashingVals.hashback.get(hash[3+i]))
-                self.shape.append([k for k in bin])
-                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
-            elif(self.len == 3 ):
-                bin = BinConvert.toBinary3.get( hashingVals.hashback.get(hash[3+i]))
-                self.shape.append([k for k in bin])
-                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
-            elif(self.len == 4 ):
-                bin = BinConvert.toBinary4.get( hashingVals.hashback.get(hash[3+i]))
-                self.shape.append([k for k in bin])
-                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
-            elif(self.len == 5 ):
-                bin = BinConvert.toBinary5.get( hashingVals.hashback.get(hash[3+i]))
-                self.shape.append([k for k in bin])
-                self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
-            else :
-                self.shape = "FAIL!!"
-            
-    
-        
-#   OLD LAME INIT Gross !
-#    def __init__(self, _shape, _id):
-#        self.shape = _shape
-#        self.id = _id
-#        self.len = len(self.shape[0])
-#        self.wid = len(self.shape)
+            bin = dec_to_bin_zeros(hashingVals.hashback.get(hash[3+i]), self.len)
+            self.shape.append([k for k in bin])
+            self.shapeN.append(hashingVals.hashback.get(( hash[3+i]) ))
 
     def __str__(self):
         col = colorNums.colors[self.id]
@@ -725,7 +533,7 @@ def main():
     
     
     
-    #Loop through all Pents calculate their
+    #Loop through all Pents calculate all their positions
     cop = 0
     for p in range(len(allPents)):
         for q in range(len(allPents[p].pentas)):
@@ -734,7 +542,6 @@ def main():
             for m in allPents[p].pentas[q].mult:
                 allPents[p].pentas[q].allPos.append(binary.addzeros(m,5))
             if(DEBUG):
-          
                 print(f'{cop}: \t{allPents[p].pentas[q].mult} \n\t{allPents[p].pentas[q].allPos} ')
   
     for p in range(len(allPents)):
@@ -774,12 +581,25 @@ def main():
     for a in range(len(allThree)):
         b = board(3,list(allThree[a])[:])
         b.binSolver(1)
-###TEST WITH all possible 4
+##TEST WITH all possible 4
 #    allThree = list(itertools.combinations(allPents,4))
 #    for a in range(len(allThree)):
 #        b = board(4,list(allThree[a])[:])
 #        b.binSolver(0)
-#
+
+##TEST WITH all possible 5
+#    allThree = list(itertools.combinations(allPents,5))
+#    for a in range(len(allThree)):
+#        b = board(5,list(allThree[a])[:])
+#        b.binSolver(0)
+
+#TEST WITH 12
+#    allThree = list(itertools.combinations(allPents,5))
+#    for a in range(len(allThree)):
+#        b = board(12,list(allThree[a])[:])
+#        b.binSolver(0)
+
+
 
 #    allPents[4].pentas[0].getPositions(3)
 
