@@ -25,5 +25,6 @@ Cartesian multiply each list together to get every possible positioning for the 
 Drawbacks: Runtime <br />
 Can be used to solve all 3x5 boards in reasonable <10 seconds, but any bigger and its not great. <br />
 <br />
-We are hoping to tranisiton into using [Knuth's Algorithm X](https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X)
+We are hoping to tranisiton into using [Knuth's Algorithm X](https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X) <br />
+[Algorithm X in 30 lines !](https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html) <br />
 
