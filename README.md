@@ -8,7 +8,7 @@ There are 12 [free](https://en.wikipedia.org/wiki/Polyomino#Free,_one-sided,_and
 A pentamino is a [polycube](https://en.wikipedia.org/wiki/Polycube) of size 5. <br />
 <br />
 The goal of the game is given n number of free [pentaminoes](https://en.wikipedia.org/wiki/Pentomino) fit them in a nx5 rectangle. <br />
-An eventual objective of this repository is to expnand this to get all solutions for any nxn space with <br />
+An eventual objective of this repository is to expnand this to get all solutions for any nxn space and even nxnxn space <br />
 
 ## Starting out
 1. Created the input file [Pentamino.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/Pentamino.txt) which denoted the 12 fixed pentaminos as 1's and 0's. <br />
