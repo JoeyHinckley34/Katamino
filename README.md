@@ -7,7 +7,7 @@ There are 12 [free](https://en.wikipedia.org/wiki/Polyomino#Free,_one-sided,_and
 63 [fixed](https://en.wikipedia.org/wiki/Polyomino#Free,_one-sided,_and_fixed_polyominoes) pentaminoes. <br />
 A pentamino is a [polycube](https://en.wikipedia.org/wiki/Polycube) of size 5. <br />
 <br />
-The goal of the game is given n number of free[pentaminoes](https://en.wikipedia.org/wiki/Pentomino) fit them in a nx5 rectangle. <br />
+The goal of the game is given n number of free [pentaminoes](https://en.wikipedia.org/wiki/Pentomino) fit them in a nx5 rectangle. <br />
 An eventual objective of this repository is to expnand this to get all solutions for any nxn space with <br />
 
 ## Starting out
