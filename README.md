@@ -7,4 +7,4 @@ The goal of the game is to fit any n number of [pentaminoes](https://en.wikipedi
 There are 12 [free](https://en.wikipedia.org/wiki/Polyomino#Free,_one-sided,_and_fixed_polyominoes) pentaminoes and 
 63 [fixed](https://en.wikipedia.org/wiki/Polyomino#Free,_one-sided,_and_fixed_polyominoes) pentaminoes. <br />
 <br />
-This game is an example of [The Packing Problem](https://en.wikipedia.org/wiki/Packing_problems) <br />p
+This game is an example of an [Exact Cover Problem](https://en.wikipedia.org/wiki/Exact_cover) <br />p
