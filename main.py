@@ -236,7 +236,9 @@ class board:
    
 #        print(((2 ** int(self.size))-1 ))
 
-    #@param dups Boolean, True means the same Pentamino can be used more than once in a solution, false means all pentaminos must be used in all solutions
+    #@param dups 0-2,   0 means all pentaminos must be used in all solutions
+    #                   1 means the same Pentamino can be used more than once in a solution,
+    #                   2 means only one Pentamino can be used in the solutions
     #@param printing Boolean, True means we will output the solutions, False means no output
     def dancinglinks(self,dups,printing):
         X = {f for f in range(self.size*5)}
@@ -275,7 +277,7 @@ class board:
         solutions = Kunths.solve(X, Y, solution)
         
         
-        if(dups):
+        if(dups==1):
 #            print('SOLUTIONS with dups:')
             solsBin = []
             for a in solutions:
@@ -285,6 +287,27 @@ class board:
                     sol = self.all[int(ind[0])][int(ind[1])]
                     curr_sol.append(sol)
                 solsBin.append(curr_sol[:])
+        elif(dups == 2):
+            print('SOLUTIONS with one tile:')
+            solsBin = []
+            pieces = []
+            for a in solutions:
+                curr_sol = []
+                curP = []
+                
+                curr_pieces = set()
+                for b in a:
+                    ind = b.split(',')
+                    curP.append(ind)
+                    
+                    
+                    curr_pieces.add(ind[0])
+                    sol = self.all[int(ind[0])][int(ind[1])]
+                    curr_sol.append(sol)
+                if len(curr_pieces) == 1:
+                    solsBin.append(curr_sol[:])
+                    pieces.append(curP)
+            
         else:
 #           print('SOLUTIONS without dups:')
             solsBin = []
@@ -363,7 +386,7 @@ def main():
     
     #################################################
     #################################################
-    BOARD_SIZE = 4 #<--- Change to maximum board size
+    BOARD_SIZE = 6 #<--- Change to maximum board size
     #################################################
     #################################################
     
@@ -436,13 +459,17 @@ def main():
 #    testing.testAll3(allPents)
 
 #    testing.testAll(allPents,BOARD_SIZE)
-    testing.testAllDups(allPents,BOARD_SIZE)
+#    testing.testAllDups(allPents,BOARD_SIZE)
     
 #    testing.testAll4x2(allPents)
 #    testing.testAll5x2(allPents)
 #    testing.testAll6x2(allPents)
      
 #    testing.SMALL_SLAM_A(allPents)
+    
+    testing.tilingPlane(allPents,BOARD_SIZE)
+
+
      
 
 if __name__ == '__main__':

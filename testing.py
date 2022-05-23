@@ -111,6 +111,12 @@ def SMALL_SLAM_A(allPents):
     b.dancinglinks(0,1)
 
 
+def tilingPlane(allPents,BOARD_SIZE):
+    b = board(BOARD_SIZE,allPents)
+    b.dancinglinks(2,1)
+
+
+
 #################
 #Bin Solver Test#
 #################
