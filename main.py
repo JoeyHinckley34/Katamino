@@ -665,7 +665,7 @@ def main():
     
     #################################################
     #################################################
-    BOARD_SIZE = 3 #<--- Change to maximum board size
+    BOARD_SIZE = 4 #<--- Change to maximum board size
     #################################################
     #################################################
     
@@ -772,7 +772,10 @@ def main():
 
 ##DANCING TESTING---------------------------------
 ##TEST WITH all possible 3
-    testing.testAll3(allPents)
+#    testing.testAll3iter(allPents)
+#    testing.testAll3(allPents)
+    
+    testing.testAll(allPents,BOARD_SIZE)
     
     
     

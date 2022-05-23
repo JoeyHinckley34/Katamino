@@ -74,10 +74,26 @@ def testAll6x2(allPents):
         b.dancinglinks(0,1)
         b = board(6,[allPents[x] for x in a[6:] ])
         b.dancinglinks(0,1)
-    
-#Executions time: 0.29 seconds
+
+
+#Executions time: 0.05 seconds
 def testAll3(allPents):
+    b = board(3,allPents)
+    b.dancinglinks(0,1)
+
+#Executions time: 0.29 seconds
+def testAll3iter(allPents):
     allThree = list(itertools.combinations(allPents,3))
     for a in range(len(allThree)):
         b = board(3,list(allThree[a])[:])
         b.dancinglinks(0,1)
+
+#BOARD_SIZE = 3 | Executions time: 0.03 seconds
+#BOARD_SIZE = 4 | Executions time: 0.25 seconds
+#BOARD_SIZE = 5 | Executions time: 1.98 seconds
+#BOARD_SIZE = 6 | Executions time: 12.81 seconds
+#BOARD_SIZE = 7 | Executions time: 95.08 seconds
+def testAll(allPents,BOARD_SIZE):
+    b = board(BOARD_SIZE,allPents)
+    b.dancinglinks(0,1)
+
