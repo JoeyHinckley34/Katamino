@@ -44,7 +44,7 @@ def DictToPentas(allDict):
  
 def getAllPents(DEBUG):
     #Getting Pentamios from hashees:
-    allPentas = getPentasFromHash('hashedPentas.txt')
+    allPentas = getPentasFromHash('InputFiles/hashedPentas.txt')
     
     if(DEBUG):
         for i in allPentas:

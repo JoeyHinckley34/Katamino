@@ -13,11 +13,6 @@ import Kunths
 import testing
 
 
-
-
-
-
-        
 class board:
     def __init__(self,_size,_pentas):
         self.size = _size
