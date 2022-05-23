@@ -11,10 +11,10 @@ The goal of the game is given n number of free [pentaminoes](https://en.wikipedi
 An eventual objective of this repository is to expnand this to get all solutions for any nxn space and even nxnxn space <br />
 
 ## Starting out
-1. Created the input file [Pentamino.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/Pentamino.txt) which denoted the 12 fixed pentaminos as 1's and 0's. <br />
-2. Read the input file and stored them as 2D arrays. For each matrix rotate four times transpose and rotate four more times to get every possible orientation and stored result into [allIters.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/allIters.txt). This file contains 80 possible orientations, but there are only 63 free pentaminoes, so there are some duplicates!<br />
+1. Created the input file [Pentamino.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/InputFiles/Pentamino.txt) which denoted the 12 fixed pentaminos as 1's and 0's. <br />
+2. Read the input file and stored them as 2D arrays. For each matrix rotate four times transpose and rotate four more times to get every possible orientation and stored result into [allIters.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/InputFiles/allIters.txt). This file contains 80 possible orientations, but there are only 63 free pentaminoes, so there are some duplicates!<br />
 3. To get rid of duplicates the Pentamino class was born. Now that there is a class, the pentaminos can be hashed and quickly compared for equality. This allows this use of sets to get rid of any duplicate Pentamino's giving the set a size of the desired 63. A full explaination of how Pentaminos are hashed can be found [here](https://github.com/JoeyHinckley34/Katamino/blob/main/hashing.txt)
-4. After getting all 63 Pentamino's hashed and in a set thier hashes were written to new text file, [hashedPentas.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/hashedPentas.txt). This now serves as the input file. The reason we are going through all this trouble messing with our input file is for speed. Generating all possible iterations is computationally expense.
+4. After getting all 63 Pentamino's hashed and in a set thier hashes were written to new text file, [hashedPentas.txt](https://github.com/JoeyHinckley34/Katamino/blob/main/InputFiles/hashedPentas.txt). This now serves as the input file. The reason we are going through all this trouble messing with our input file is for speed. Generating all possible iterations is computationally expense.
 5. Now we can get to actually solving !
 
 ## The algorithm 
