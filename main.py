@@ -2,9 +2,12 @@
 import numpy as np
 import binary
 import itertools
+import time
 #Custom Imports
 from colors_util import bcolors, colorNums
 from hashing_util import BinConvert, hashingVals
+import Kunths
+import testing
 
 #HELPER FUNCTIONS
 #@param x : Number in base ten
@@ -136,28 +139,37 @@ class Pentamino:
         self.shape.append([0 for j in range(size) for i in range(5-self.wid)])
         print(self.shape)
 
-  
-        
-
 
 #Class to hold all varations of a penta
 class PentaContainer:
     def __init__(self, _pentas):
         self.pentas = _pentas
+        self.id = self.pentas[0].id
         self.Full = []
-
+        self.BinFull = []
+        
     def __str__(self):
         ret = ''
-        
         for i in self.pentas:
             ret += str(i)
-        
         return ret
         
+    def BinString(self):
+       
+        ret = 'hello\n'
+        for a in range(len(self.BinFull)):
+            print(a,self.BinFull[a])
+            for b in range(len(self.BinFull[a])):
+                if b % 5 == 0 and b != 0:
+                    ret += '\n'
+#                    print()
+#                print(str(self.BinFull[a][b]),end= ' ')
+                ret += str(self.BinFull[a][b])
+            ret += '\n\n'
+#            print('\n')
+        return ret
+            
         
-    
-
-
 class board:
     def __init__(self,_size,_pentas):
         self.size = _size
@@ -252,8 +264,8 @@ class board:
                 print(currIter)
                 
      
-    
-     
+    #@param allSol : a Boolean that is true for all solutions, and false for the first solutioon found
+    #@returns
     def binSolver (self,allSol):
         
 #        print(f'{self.pentas[p]}\nFULL: {self.pentas[p].Full}')
@@ -323,7 +335,7 @@ class board:
                             print( ('+' + '---' * self.size +'--+   ') * self.size)
                             
                             
-                            return
+                            return True
                             
                     elif Fit:
                         pass
@@ -335,10 +347,12 @@ class board:
            
            
         if len(allSums) == 0:
-            pass
+            return False
 #            print('no solutions found')
         else:
             print('SOLUTIONS: ')
+            
+            
             for x in range(len(allSums)):
                 print( ('+' + '---' * self.size +'--+\t') * self.size + '| ROW SUM ' )
                 rows = [[] for _ in range(5)]
@@ -368,7 +382,7 @@ class board:
                 print(bcolors.ResetAll,end='')
 #                print(f'solution #{a}: {int(bin(allSums[a])[2:])} ')
           
-            
+            return True
         
             
 #                print(element)
@@ -378,6 +392,122 @@ class board:
                 
    
 #        print(((2 ** int(self.size))-1 ))
+
+    #@param dups Boolean, True means the same Pentamino can be used more than once in a solution, false means all pentaminos must be used in all solutions
+    #@param printing Boolean, True means we will output the solutions, False means no output
+    def dancinglinks(self,dups,printing):
+        X = {f for f in range(self.size*5)}
+#        print(X)
+        X = {j: set() for j in X}
+#        print(X)
+        
+        for p in  range(len(self.pentas)):
+            self.all.append(self.pentas[p].BinFull)
+#            print(self.pentas[p])
+#            self.pentas[p].BinString()
+            
+            
+        Y = {}
+            
+        for a in range(len(self.all)):
+            for b in range(len(self.all[a])):
+#                print(a,b,self.all[a][b])
+                indices = [i for i, x in enumerate(self.all[a][b]) if x == 1]
+#                print(indices)
+                Y[str(a)+","+str(b)] = indices
+        
+#        for key, value in Y.items():
+#            print(key,value)
+        
+        for i in Y:
+            for j in Y[i]:
+                pass
+#                print(j)
+                X[j].add(i)
+                
+#        for key, value in X.items():
+#            print(key,value)
+        
+        solution = []
+        solutions = Kunths.solve(X, Y, solution)
+        
+        
+        if(dups):
+#            print('SOLUTIONS with dups:')
+            solsBin = []
+            for a in solutions:
+                curr_sol = []
+                for b in a:
+                    ind = b.split(',')
+                    sol = self.all[int(ind[0])][int(ind[1])]
+                    curr_sol.append(sol)
+                solsBin.append(curr_sol[:])
+        else:
+#           print('SOLUTIONS without dups:')
+            solsBin = []
+            pieces = []
+            for a in solutions:
+                curr_sol = []
+                curP = []
+                
+                curr_pieces = set()
+                for b in a:
+                    ind = b.split(',')
+                    curP.append(ind)
+                    
+                    
+                    curr_pieces.add(ind[0])
+                    sol = self.all[int(ind[0])][int(ind[1])]
+                    curr_sol.append(sol)
+                if len(curr_pieces) == self.size:
+                    solsBin.append(curr_sol[:])
+                    pieces.append(curP)
+            
+        if(len(solsBin) != 0):
+            if(printing):
+        
+                print('\nSolutions\n')
+    #            for p in pieces:
+    #                for q in p:
+    #                    print(self.pentas[int(q[0])])
+    #            print(pieces)
+            
+            
+                solNum = itertools.count()
+                for a in solsBin:
+            #           print(a)
+                    print(f'Solution {next(solNum)}:')
+                    print( ('+' + '---' * self.size +'--+   ') * self.size)
+                    rows = [[] for _ in range(5)]
+                    for b in a:
+                        for c in range(len(b)):
+            #                   print(b[c],end =" ")
+                            rows[c//self.size].append(b[c])
+            #               print()
+                    for b in rows:
+                        print('| ',end='')
+                        for c in range(len(b)):
+                            col = colorNums.colors[c//self.size]
+                            black = bcolors.Black
+                            reset  =  bcolors.ResetAll
+                            if c % self.size == 0 and c != 0:
+                                print(reset,'|   | ',end ='')
+                            if b[c] == 0:
+                                print(black,'.',end=' ')
+                            else:
+                                print(col,'*',end=' ')
+                        print(reset,'| ',end='')
+                        print(reset)
+
+                    print( ('+' + '---' * self.size +'--+   ') * self.size)
+                    print(bcolors.ResetAll,end='')
+
+            return True
+        return False
+    
+
+
+
 
 
 #@param filename : filename we are reading in 'Penatmino.txt'
@@ -479,7 +609,9 @@ def DictToPentas(allDict):
 #        print(f'Pentanmino ID: {key} ')
         Pentas.append(PentaContainer(value))
     return Pentas
-    
+ 
+ 
+
 
 def main():
     DEBUG = 0
@@ -531,40 +663,79 @@ def main():
 #            print(p)
         print(f'Number of fixed pentaminoes: {numFixed} \nNumber of free pentaminoes:  {len(allPents)}')
     
-    
+    #################################################
+    #################################################
+    BOARD_SIZE = 3 #<--- Change to maximum board size
+    #################################################
+    #################################################
     
     #Loop through all Pents calculate all their positions
     cop = 0
     for p in range(len(allPents)):
         for q in range(len(allPents[p].pentas)):
             cop += 1
-            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,3) #<--- Change to maximum board size
+            allPents[p].pentas[q].mult = binary.multiplyList(allPents[p].pentas[q].shapeN,BOARD_SIZE)
             for m in allPents[p].pentas[q].mult:
                 allPents[p].pentas[q].allPos.append(binary.addzeros(m,5))
             if(DEBUG):
                 print(f'{cop}: \t{allPents[p].pentas[q].mult} \n\t{allPents[p].pentas[q].allPos} ')
   
+    x = 0
     for p in range(len(allPents)):
         for q in range(len(allPents[p].pentas)):
 #                print(self.pentas[p].pentas[q])
 #                print(self.pentas[p].pentas[q].allPos)
                 allPents[p].Full.append((allPents[p].pentas[q].allPos))
+                
+    for p in range(len(allPents)):
+#        print(allPents[p])
+        for f in range(len(allPents[p].Full)):
+#            print(allPents[p].Full[f])
+            for a in range(len(allPents[p].Full[f])):
+                for b in range(len(allPents[p].Full[f][a])):
+#                    print(allPents[p].Full[f][a][b])
+                    cur_row = []
+                    for c in range(len(allPents[p].Full[f][a][b])):
+                        
+                        bin_row =  str(dec_to_bin_zeros( allPents[p].Full[f][a][b][c],BOARD_SIZE))
+                        for d in bin_row:
+                            cur_row.append(int(d))
+                    
+                    #Only add shapes that fit in the board
+                    #When the board is larger than 5 all shapes fit
+                    if (BOARD_SIZE > 5):
+                        allPents[p].BinFull.append(cur_row[:])
+                    elif (len(cur_row ) == (BOARD_SIZE*5)):
+                        allPents[p].BinFull.append(cur_row[:])
+                    
+                            
+    if(DEBUG):
+        for p in range(len(allPents)):
+            print(allPents[p])
+            for r in range(len( allPents[p].BinFull)):
+                print(allPents[p].BinFull[r])
+            print()
+    
+    
             
-  
-####TEST WITH 1
+###TEST WITH 1
 #    print(allPents[4])
 #    one = board(1,[allPents[4]])
 #    print(one)
 #    one.binSolver(1)
+#    one.dancinglinks(1)
 
 ####TEST WITH 3
 #    b = board(3,[allPents[4],allPents[5],allPents[11]])
 #    b.binSolver(1)
+#    b.dancinglinks(0,1)
+    
     
 ######TEST WITH 4
 #    b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
 #    b.binSolver(0)
-
+#    b.dancinglinks(0,1)
+    
 #####TEST WITH 5
 #    b = board(5,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3]])
 ##    print(b.pentas[0].pentas[0])
@@ -577,16 +748,15 @@ def main():
 #    print(b)
 
 ##TEST WITH all possible 3
-    allThree = list(itertools.combinations(allPents,3))
-    for a in range(len(allThree)):
-        b = board(3,list(allThree[a])[:])
-        b.binSolver(1)
+#    allThree = list(itertools.combinations(allPents,3))
+#    for a in range(len(allThree)):
+#        b = board(3,list(allThree[a])[:])
+#        b.binSolver(1)
 ##TEST WITH all possible 4
 #    allThree = list(itertools.combinations(allPents,4))
 #    for a in range(len(allThree)):
 #        b = board(4,list(allThree[a])[:])
 #        b.binSolver(0)
-
 ##TEST WITH all possible 5
 #    allThree = list(itertools.combinations(allPents,5))
 #    for a in range(len(allThree)):
@@ -600,6 +770,49 @@ def main():
 #        b.binSolver(0)
 
 
+##DANCING TESTING---------------------------------
+##TEST WITH all possible 3
+    testing.testAll3(allPents)
+    
+    
+    
+#    b = board(5,allPents)
+#    b.dancinglinks(1)
+    
+#Small Slam A
+#Executions time: 126.77 seconds
+#    b = board(8,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3],allPents[9],allPents[8],allPents[0]])
+#    b.dancinglinks(0)
+#
+    
+#    testing.testAll4x2(allPents)
+#    testing.testAll5x2(allPents)
+#    testing.testAll6x2(allPents)
+     
+     
+     
+#    b = board(12,allPents)
+#    b.dancinglinks(0,1)
+#
+     
+#    for a in sol:
+#        LOS.append(set())
+#        for b in a:
+#            print(b.id,end = ' ')
+#        print()
+#
+#    print(LOS)
+    
+    
+    
+#    b = board(4,allPents)
+#    b.dancinglinks(0)
+
+#Penta 9 A
+
+#    b = board(9,[allPents[6],allPents[4],allPents[5],allPents[0],allPents[8],allPents[1],allPents[2],allPents[9],allPents[7]])
+#    b.dancinglinks(0)
+
 
 #    allPents[4].pentas[0].getPositions(3)
 
@@ -608,4 +821,7 @@ def main():
     
 
 if __name__ == '__main__':
+    start = time.perf_counter()
     main()
+    end = time.perf_counter()
+    print(f'Executions time: {round(end - start,2)} seconds')
