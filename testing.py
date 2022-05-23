@@ -1,6 +1,10 @@
 import itertools
 from main import board
 
+#####################
+#Dancing Links Tests#
+#####################
+
 #Solutions of 2 4x5s without duplicates
 def testAll4x2(allPents):
     sol = []
@@ -96,4 +100,44 @@ def testAll3iter(allPents):
 def testAll(allPents,BOARD_SIZE):
     b = board(BOARD_SIZE,allPents)
     b.dancinglinks(0,1)
+
+def testAllDups(allPents,BOARD_SIZE):
+    b = board(BOARD_SIZE,allPents)
+    b.dancinglinks(1,1)
+
+#Executions time: 126.77 seconds
+def SMALL_SLAM_A(allPents):
+    b = board(8,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3],allPents[9],allPents[8],allPents[0]])
+    b.dancinglinks(0,1)
+
+
+#################
+#Bin Solver Test#
+#################
+
+###TEST WITH 1
+#@param pentaContainer
+def testBinOne(penta):
+#    print(penta)
+    one = board(1,[penta])
+    print(one)
+    one.binSolver(1)
+
+####TEST WITH 3
+def testBinThree(allPents,pentas):
+    b = board(3,[allPents[x] for x in pentas])
+    b.binSolver(1)
+
+####TEST WITH ALL
+#BOARD_SIZE = 3 | Executions time: 0.15 seconds
+#BOARD_SIZE = 4 | Executions time: 33.91 seconds
+def testBinAll(allPents,BOARD_SIZE,pentas):
+    b = board(BOARD_SIZE,[allPents[x] for x in pentas])
+    b.binSolver(1)
+
+def testBinIters(allPents,BOARD_SIZE):
+    allThree = list(itertools.combinations(allPents,BOARD_SIZE))
+    for a in range(len(allThree)):
+        b = board(BOARD_SIZE,list(allThree[a])[:])
+        b.binSolver(1)
 

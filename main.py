@@ -354,7 +354,7 @@ class board:
             
             
             for x in range(len(allSums)):
-                print( ('+' + '---' * self.size +'--+\t') * self.size + '| ROW SUM ' )
+                print( ('+' + '---' * self.size +'--+   ') * self.size + '| ROW SUM ' )
                 rows = [[] for _ in range(5)]
 #                print(allSums[a])
                 for b in range(len(allSums[x])):
@@ -378,7 +378,7 @@ class board:
                 
                     
 #                print(rows)
-                print( ('+' + '---' * self.size +'--+\t') * self.size)
+                print( ('+' + '---' * self.size +'--+   ') * self.size)
                 print(bcolors.ResetAll,end='')
 #                print(f'solution #{a}: {int(bin(allSums[a])[2:])} ')
           
@@ -707,8 +707,7 @@ def main():
                         allPents[p].BinFull.append(cur_row[:])
                     elif (len(cur_row ) == (BOARD_SIZE*5)):
                         allPents[p].BinFull.append(cur_row[:])
-                    
-                            
+                                                
     if(DEBUG):
         for p in range(len(allPents)):
             print(allPents[p])
@@ -717,111 +716,36 @@ def main():
             print()
     
     
-            
-###TEST WITH 1
-#    print(allPents[4])
-#    one = board(1,[allPents[4]])
-#    print(one)
-#    one.binSolver(1)
-#    one.dancinglinks(1)
+#################
+#Bin Solver Test#
+#################
 
-####TEST WITH 3
-#    b = board(3,[allPents[4],allPents[5],allPents[11]])
-#    b.binSolver(1)
-#    b.dancinglinks(0,1)
+#    testing.testBinOne(allPents[4])
+#    testing.testBinThree(allPents,[4,5,11])
+
+#    testing.testBinAll(allPents,BOARD_SIZE,[4,5,11])
+#    testing.testBinAll(allPents,BOARD_SIZE,[4,5,11,1])
+#    testing.testBinAll(allPents,BOARD_SIZE,[4,5,11,1,3])
+#    testing.testBinAll(allPents,BOARD_SIZE,[4,5,11,1,3,9])
     
-    
-######TEST WITH 4
-#    b = board(4,[allPents[4],allPents[5],allPents[11],allPents[1]])
-#    b.binSolver(0)
-#    b.dancinglinks(0,1)
-    
-#####TEST WITH 5
-#    b = board(5,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3]])
-##    print(b.pentas[0].pentas[0])
-#    b.binSolver(0)
-    
-##TEST WITH 6
-#    b = board(6,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3],allPents[9]])
-#    b.binSolver(0)
+#    testing.testBinIters(allPents,BOARD_SIZE)
 
-#    print(b)
+#####################
+#Dancing Links Tests#
+#####################
 
-##TEST WITH all possible 3
-#    allThree = list(itertools.combinations(allPents,3))
-#    for a in range(len(allThree)):
-#        b = board(3,list(allThree[a])[:])
-#        b.binSolver(1)
-##TEST WITH all possible 4
-#    allThree = list(itertools.combinations(allPents,4))
-#    for a in range(len(allThree)):
-#        b = board(4,list(allThree[a])[:])
-#        b.binSolver(0)
-##TEST WITH all possible 5
-#    allThree = list(itertools.combinations(allPents,5))
-#    for a in range(len(allThree)):
-#        b = board(5,list(allThree[a])[:])
-#        b.binSolver(0)
-
-#TEST WITH 12
-#    allThree = list(itertools.combinations(allPents,5))
-#    for a in range(len(allThree)):
-#        b = board(12,list(allThree[a])[:])
-#        b.binSolver(0)
-
-
-##DANCING TESTING---------------------------------
-##TEST WITH all possible 3
 #    testing.testAll3iter(allPents)
 #    testing.testAll3(allPents)
-    
-    testing.testAll(allPents,BOARD_SIZE)
-    
-    
-    
-#    b = board(5,allPents)
-#    b.dancinglinks(1)
-    
-#Small Slam A
-#Executions time: 126.77 seconds
-#    b = board(8,[allPents[4],allPents[5],allPents[11],allPents[1],allPents[3],allPents[9],allPents[8],allPents[0]])
-#    b.dancinglinks(0)
-#
+
+#    testing.testAll(allPents,BOARD_SIZE)
+    testing.testAllDups(allPents,BOARD_SIZE)
     
 #    testing.testAll4x2(allPents)
 #    testing.testAll5x2(allPents)
 #    testing.testAll6x2(allPents)
      
+#    testing.SMALL_SLAM_A(allPents)
      
-     
-#    b = board(12,allPents)
-#    b.dancinglinks(0,1)
-#
-     
-#    for a in sol:
-#        LOS.append(set())
-#        for b in a:
-#            print(b.id,end = ' ')
-#        print()
-#
-#    print(LOS)
-    
-    
-    
-#    b = board(4,allPents)
-#    b.dancinglinks(0)
-
-#Penta 9 A
-
-#    b = board(9,[allPents[6],allPents[4],allPents[5],allPents[0],allPents[8],allPents[1],allPents[2],allPents[9],allPents[7]])
-#    b.dancinglinks(0)
-
-
-#    allPents[4].pentas[0].getPositions(3)
-
-#    b.solve2()
-#    print(b)
-    
 
 if __name__ == '__main__':
     start = time.perf_counter()
