@@ -58,7 +58,10 @@ class Pentamino:
         
     def __eq__(self,obj):
         return isinstance(obj,Pentamino) and self.shape == obj.shape
-        
+            
+    def __lt__(self,other):
+        return self.id < other.id
+
     #Go hashing.txt to get a full walk through of how we hash Pentaminos
     def __hash__(self):
         #Checkes if id is greater than 9
@@ -82,12 +85,7 @@ class Pentamino:
                 h1 += str(h)
             bin = ''
         return hash(h1)
-        
-    def __lt__(self,other):
-        return self.id < other.id
-    
-    
-        
+
     #@returns h1 : returns the hash value we generate to give to the hash() function
     def gethash(self):
         #Checkes if id is greater than 9
@@ -149,4 +147,10 @@ class PentaContainer:
             ret += '\n\n'
 #            print('\n')
         return ret
+
+    def __eq__(self,obj):
+        return isinstance(obj,Pentamino) and self.id == obj.id
+            
+    def __lt__(self,other):
+        return self.id < other.id
             
