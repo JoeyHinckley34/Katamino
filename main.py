@@ -13,12 +13,12 @@ def main():
 
     allPents = getAllPents(DEBUG)
     
-#     if(DEBUG):
-#         numFixed = 0
-#         for p in allPents:
-#             numFixed += len(p.pentas)
-# #            print(p)
-#         print(f'Number of fixed pentaminoes: {numFixed} \nNumber of free pentaminoes:  {len(allPents)}')
+    if(DEBUG):
+        numFixed = 0
+        for p in allPents:
+            numFixed += len(p.pentas)
+            print(p)
+        print(f'Number of fixed pentaminoes: {numFixed} \nNumber of free pentaminoes:  {len(allPents)}')
     
     #################################################
     #################################################
@@ -105,11 +105,7 @@ def main():
 #    testing.testAll6x2(allPents)
      
 #    testing.SMALL_SLAM_A(allPents)
-    
 #    testing.tilingPlane(allPents,BOARD_SIZE)
-
-
-     
 
 if __name__ == '__main__':
     start = time.perf_counter()

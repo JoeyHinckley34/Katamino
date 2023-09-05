@@ -9,23 +9,21 @@ class Pentamino:
         self.len = len(self.shape[0])
         self.wid = len(self.shape)
 #        self.shapes =
+
     def __str__(self):
         col = colorNums.colors[self.id]
         black = bcolors.Black
         ret = ""
         ret += col
         ret = "-\n"
-#        ret += col
         for row in self.shape:
             for i in row:
-            ###
                 if i == '0':
                     ret += black
                     ret += '.'
                 else:
                     ret += col
                     ret += '*'
-            ###
 #                ret += i
             ret += "\n"
         ret += bcolors.ResetAll
@@ -37,7 +35,7 @@ class Pentamino:
     #@returns h1 : returns the hash value we generate to give to the hash() function
     def gethash(self):
         #Checkes if id is greater than 9
-        if ( self.id > 9):
+        if (self.id > 9):
             h1 = str(hashingVals.hashes.get(self.id))
         else:
             h1 = str(self.id)
